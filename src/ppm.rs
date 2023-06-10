@@ -21,9 +21,9 @@ impl Image {
             return Ok(Self {
                 width: width,
                 height: height,
-                colors: Self::default_colors(width, height), 
+                colors: Self::default_colors(width, height),
                 fd: File::create(filename).unwrap(),
-            })
+            });
         }
         if colors.len() != width.try_into().unwrap()
             || colors[0].len() != height.try_into().unwrap()
@@ -71,17 +71,16 @@ impl Image {
         }
         colors
     }
-
 }
 
 impl Default for Image {
     fn default() -> Self {
-        let width = 256; 
-        let height = 256; 
+        let width = 256;
+        let height = 256;
         Self {
             width: width,
             height: height,
-            colors: Self::default_colors(width, height), 
+            colors: Self::default_colors(width, height),
             fd: File::create("output/test.ppm").unwrap(),
         }
     }
