@@ -17,6 +17,14 @@ impl Image {
         colors: Vec<Vec<Vec3>>,
         filename: String,
     ) -> Result<Self, &'static str> {
+        if colors.is_empty() {
+            return Ok(Self {
+                width: width,
+                height: height,
+                colors: Self::default_colors(width, height), 
+                fd: File::create(filename).unwrap(),
+            })
+        }
         if colors.len() != width.try_into().unwrap()
             || colors[0].len() != height.try_into().unwrap()
         {
@@ -51,26 +59,29 @@ impl Image {
         }
     }
 
-    pub fn colors(&self) -> Vec<Vec<Vec3>> {
-        self.colors.clone()
-    }
-}
-
-impl Default for Image {
-    fn default() -> Self {
+    fn default_colors(width: u32, height: u32) -> Vec<Vec<Vec3>> {
         let mut colors: Vec<Vec<Vec3>> = vec![];
-        for y in (0..256).rev() {
+        for y in (0..height).rev() {
             let mut tmp_vec: Vec<Vec3> = vec![];
-            for x in 0..256 {
+            for x in 0..width {
                 let c = Color::new(x as f64 / 255.0, y as f64 / 255.0, 0.25);
                 tmp_vec.push(c);
             }
             colors.push(tmp_vec);
         }
+        colors
+    }
+
+}
+
+impl Default for Image {
+    fn default() -> Self {
+        let width = 256; 
+        let height = 256; 
         Self {
-            width: 256,
-            height: 256,
-            colors: colors,
+            width: width,
+            height: height,
+            colors: Self::default_colors(width, height), 
             fd: File::create("output/test.ppm").unwrap(),
         }
     }
