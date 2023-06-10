@@ -50,6 +50,14 @@ pub fn unit_vector(u: &Vec3) -> Vec3 {
     *u / u.length()
 }
 
+impl Default for Vec3 {
+    fn default() -> Self {
+        Self {
+            vals: [0.0, 0.0, 0.0],
+        }
+    }
+}
+
 // unary operators
 impl Neg for Vec3 {
     type Output = Self;
@@ -133,6 +141,15 @@ impl Mul<f64> for Vec3 {
     fn mul(self, rhs: f64) -> Self::Output {
         Self {
             vals: [self.vals[0] * rhs, self.vals[1] * rhs, self.vals[2] * rhs],
+        }
+    }
+}
+
+impl Mul<Vec3> for f64 {
+    type Output = Vec3;
+    fn mul(self, rhs: Vec3) -> Self::Output {
+        Self::Output {
+            vals: [self * rhs.vals[0], self * rhs.vals[1], self * rhs.vals[2]],
         }
     }
 }

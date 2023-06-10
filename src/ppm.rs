@@ -17,8 +17,10 @@ impl Image {
         colors: Vec<Vec<Vec3>>,
         filename: String,
     ) -> Result<Self, &'static str> {
-        if colors.len() != width.try_into().unwrap() || colors[0].len() != height.try_into().unwrap() {
-            return Err("Invalid colors length")
+        if colors.len() != width.try_into().unwrap()
+            || colors[0].len() != height.try_into().unwrap()
+        {
+            return Err("Invalid colors length");
         }
 
         Ok(Self {
