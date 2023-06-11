@@ -14,7 +14,7 @@ impl Image {
     pub fn new(
         width: u32,
         height: u32,
-        colors: Vec<Vec<Vec3>>,
+        colors: &Vec<Vec<Vec3>>,
         filename: String,
     ) -> Result<Self, &'static str> {
         if colors.is_empty() {
@@ -25,8 +25,8 @@ impl Image {
                 fd: File::create(filename).unwrap(),
             });
         }
-        if colors.len() != width.try_into().unwrap()
-            || colors[0].len() != height.try_into().unwrap()
+        if colors.len() != height.try_into().unwrap()
+            || colors[0].len() != width.try_into().unwrap()
         {
             return Err("Invalid colors length");
         }
@@ -34,9 +34,21 @@ impl Image {
         Ok(Self {
             width: width,
             height: height,
-            colors: colors,
+            colors: colors.clone(),
             fd: File::create(filename).unwrap(),
         })
+    }
+    fn default_colors(width: u32, height: u32) -> Vec<Vec<Vec3>> {
+        let mut colors: Vec<Vec<Vec3>> = vec![];
+        for y in (0..height).rev() {
+            let mut tmp_vec: Vec<Vec3> = vec![];
+            for x in 0..width {
+                let c = Color::new(x as f64 / 255.0, y as f64 / 255.0, 0.25);
+                tmp_vec.push(c);
+            }
+            colors.push(tmp_vec);
+        }
+        colors
     }
 
     pub fn write(&mut self) {
@@ -57,19 +69,6 @@ impl Image {
                     .expect("Unable to write data")
             }
         }
-    }
-
-    fn default_colors(width: u32, height: u32) -> Vec<Vec<Vec3>> {
-        let mut colors: Vec<Vec<Vec3>> = vec![];
-        for y in (0..height).rev() {
-            let mut tmp_vec: Vec<Vec3> = vec![];
-            for x in 0..width {
-                let c = Color::new(x as f64 / 255.0, y as f64 / 255.0, 0.25);
-                tmp_vec.push(c);
-            }
-            colors.push(tmp_vec);
-        }
-        colors
     }
 }
 
