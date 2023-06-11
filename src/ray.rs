@@ -29,7 +29,7 @@ pub fn ray_color(r: &Ray) -> Color {
     // intercept sphere
     if let Some(t) = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, r) {
         let normal = unit_vector(&(r.at(t) - Vec3::new(0.0, 0.0, -1.0)));
-        return Color::new(normal.x()+1.0, normal.y()+1.0, normal.z()+1.0);
+        return Color::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
     }
     let unit_dir = unit_vector(&r.direction());
     let t = 0.5 * (unit_dir.y() + 1.0);

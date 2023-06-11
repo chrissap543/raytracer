@@ -2,10 +2,10 @@ use ppm::Image;
 use ray::{ray_color, Ray};
 use vector::{Point3, Vec3};
 
+mod hittable;
 mod ppm;
 mod ray;
 mod vector;
-mod hittable; 
 
 fn main() {
     // default image
