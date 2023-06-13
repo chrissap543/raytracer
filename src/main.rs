@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use ppm::Image;
 use ray::{ray_color, Ray};
 use vector::{Point3, Vec3};
@@ -14,7 +16,7 @@ fn main() {
 
     // setting up image
     let aspect_ratio = 16.0 / 9.0;
-    let image_width = 400;
+    let image_width = 2000;
     let image_height = (image_width as f64 / aspect_ratio) as u32;
 
     // setting up camera

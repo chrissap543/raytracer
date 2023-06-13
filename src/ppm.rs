@@ -19,8 +19,8 @@ impl Image {
     ) -> Result<Self, &'static str> {
         if colors.is_empty() {
             return Ok(Self {
-                width: width,
-                height: height,
+                width,
+                height,
                 colors: Self::default_colors(width, height),
                 fd: File::create(filename).unwrap(),
             });
@@ -32,8 +32,8 @@ impl Image {
         }
 
         Ok(Self {
-            width: width,
-            height: height,
+            width,
+            height,
             colors: colors.clone(),
             fd: File::create(filename).unwrap(),
         })
@@ -77,8 +77,8 @@ impl Default for Image {
         let width = 256;
         let height = 256;
         Self {
-            width: width,
-            height: height,
+            width,
+            height,
             colors: Self::default_colors(width, height),
             fd: File::create("output/test.ppm").unwrap(),
         }

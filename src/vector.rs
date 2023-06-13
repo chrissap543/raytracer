@@ -23,12 +23,10 @@ impl Vec3 {
     }
 
     pub fn length(&self) -> f64 {
-        return self.length_squared().sqrt();
+        self.length_squared().sqrt()
     }
     pub fn length_squared(&self) -> f64 {
-        return self.vals[0] * self.vals[0]
-            + self.vals[1] * self.vals[1]
-            + self.vals[2] * self.vals[2];
+        self.vals[0] * self.vals[0] + self.vals[1] * self.vals[1] + self.vals[2] * self.vals[2]
     }
 }
 
@@ -47,7 +45,7 @@ pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
 }
 
 pub fn unit_vector(u: &Vec3) -> Vec3 {
-    u.clone() / u.length()
+    *u / u.length()
 }
 
 impl Default for Vec3 {
