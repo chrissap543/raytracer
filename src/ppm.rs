@@ -1,6 +1,6 @@
 use crate::vector::*;
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufWriter, Write};
 
 // ppm file specification
 pub struct Image {
@@ -52,8 +52,9 @@ impl Image {
     }
 
     pub fn write(&mut self) {
-        self.fd
-            .write_all(format!("P3\n{} {}\n255\n", self.width, self.height).as_bytes())
+        let mut file = self.fd.try_clone().unwrap();
+        let mut buf = BufWriter::new(file);
+        buf.write_all(format!("P3\n{} {}\n255\n", self.width, self.height).as_bytes())
             .expect("Unable to write data");
 
         for vec in self.colors.iter() {
@@ -64,9 +65,7 @@ impl Image {
                     (255.999 * c.y()) as i16,
                     (255.999 * c.z()) as i16
                 );
-                self.fd
-                    .write_all(str.as_bytes())
-                    .expect("Unable to write data")
+                buf.write_all(str.as_bytes()).expect("Unable to write data")
             }
         }
     }

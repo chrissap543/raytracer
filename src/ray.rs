@@ -1,4 +1,8 @@
-use crate::vector::*;
+use crate::{
+    hittable::{HitRecord, Hittable},
+    util::INFINITY,
+    vector::*,
+};
 #[derive(Default)]
 pub struct Ray {
     orig: Point3,
@@ -25,11 +29,13 @@ impl Ray {
     }
 }
 
-pub fn ray_color(r: &Ray) -> Color {
-    // intercept sphere
-    if let Some(t) = hit_sphere(&Point3::new(0.0, 0.0, -1.0), 0.5, r) {
-        let normal = unit_vector(&(r.at(t) - Vec3::new(0.0, 0.0, -1.0)));
-        return Color::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
+pub fn ray_color(r: &Ray, world: &dyn Hittable) -> Color {
+    // intercept
+    let mut rec: HitRecord = Default::default();
+    if world.hit(r, 0.0, INFINITY, &mut rec) {
+        // let normal = unit_vector(&(r.at(t) - Vec3::new(0.0, 0.0, -1.0)));
+        // return Color::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
+        return (0.5 * (rec.normal + Color::new(1.0, 1.0, 1.0))) as Color;
     }
     let unit_dir = unit_vector(&r.direction());
     let t = 0.5 * (unit_dir.y() + 1.0);

@@ -2,12 +2,16 @@ use std::rc::Rc;
 
 use super::HitRecord;
 use super::Hittable;
-
+#[derive(Default)]
 pub struct HittableList {
     objects: Vec<Rc<dyn Hittable>>,
 }
 
 impl HittableList {
+    pub fn new() -> Self {
+        Self { objects: vec![] }
+    }
+
     pub fn clear(&mut self) {
         self.objects.clear()
     }

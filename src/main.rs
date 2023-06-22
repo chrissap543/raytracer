@@ -1,10 +1,12 @@
 #![allow(dead_code)]
 
 use std::{
+    rc::Rc,
     sync::{Arc, Mutex},
     time::Instant,
 };
 
+use hittable::{hittable_list::HittableList, sphere::Sphere, Hittable};
 use ppm::Image;
 use ray::{ray_color, Ray};
 use vector::{Point3, Vec3};
@@ -12,12 +14,13 @@ use vector::{Point3, Vec3};
 mod hittable;
 mod ppm;
 mod ray;
+mod util;
 mod vector;
 
 fn main() {
     // setting up image
     let aspect_ratio = 16.0 / 9.0;
-    let image_width = 2000;
+    let image_width = 400;
     let image_height = (image_width as f64 / aspect_ratio) as u32;
 
     // setting up camera
@@ -31,32 +34,22 @@ fn main() {
     let lower_left_corner =
         origin - horizontal / 2.0 - vertical / 2.0 - Vec3::new(0.0, 0.0, focal_length);
 
+    /*
     // generate colors
-    // let start = Instant::now();
-    // let v = multithread(
-    //     image_height,
-    //     image_width,
-    //     &origin,
-    //     &horizontal,
-    //     &vertical,
-    //     &lower_left_corner,
-    // ).unwrap();
-    // let duration = start.elapsed();
-    // println!("Time elapsed in multithread() is: {:?}", duration);
+    let start = Instant::now();
+    let v = multithread(
+        image_height,
+        image_width,
+        &origin,
+        &horizontal,
+        &vertical,
+        &lower_left_corner,
+    ).unwrap();
+    let duration = start.elapsed();
+    println!("Time elapsed in multithread() is: {:?}", duration);
 
-    // let start = Instant::now();
-    // let _ = singlethread(
-    //     image_height,
-    //     image_width,
-    //     &origin,
-    //     &horizontal,
-    //     &vertical,
-    //     &lower_left_corner,
-    // );
-    // let duration = start.elapsed();
-    // println!("Time elapsed in singlethread() is: {:?}", duration);
-
-    let v = singlethread(
+    let start = Instant::now();
+    let _ = singlethread(
         image_height,
         image_width,
         &origin,
@@ -64,14 +57,34 @@ fn main() {
         &vertical,
         &lower_left_corner,
     );
+    let duration = start.elapsed();
+    println!("Time elapsed in singlethread() is: {:?}", duration);
+    */
+
+    let mut world = HittableList::new();
+    world.add(Rc::new(Sphere::new(&Point3::new(0.0, 0.0, -1.0), 0.5)));
+    world.add(Rc::new(Sphere::new(&Point3::new(0.0, -100.5, -1.0), 100.0)));
+    let v = singlethread(
+        image_height,
+        image_width,
+        &origin,
+        &horizontal,
+        &vertical,
+        &lower_left_corner,
+        &world,
+    );
     let mut raytraced = Image::new(
         image_width,
         image_height,
         &v,
-        "output/multi.ppm".to_string(),
+        "output/raytraced.ppm".to_string(),
     )
     .unwrap();
+
+    let start = Instant::now();
     raytraced.write();
+    let duration = start.elapsed();
+    println!("Time elapsed in write() is: {:?}", duration);
 }
 
 fn singlethread(
@@ -81,6 +94,7 @@ fn singlethread(
     horizontal: &Vec3,
     vertical: &Vec3,
     lower_left_corner: &Vec3,
+    world: &dyn Hittable,
 ) -> Vec<Vec<Vec3>> {
     let mut v: Vec<Vec<Vec3>> = vec![];
     for j in (0..image_height).rev() {
@@ -92,7 +106,7 @@ fn singlethread(
                 &origin,
                 &(*lower_left_corner + u * *horizontal + v * *vertical - *origin),
             );
-            let c = ray_color(&r);
+            let c = ray_color(&r, world);
             temp_vec.push(c);
         }
         v.push(temp_vec);
@@ -100,6 +114,7 @@ fn singlethread(
     v
 }
 
+/*
 fn multithread(
     image_height: u32,
     image_width: u32,
@@ -145,3 +160,4 @@ fn multithread(
         }
     }
 }
+*/

@@ -3,13 +3,13 @@ use crate::{
     vector::{dot, Point3, Vec3},
 };
 
-mod hittable_list;
-mod sphere;
+pub mod hittable_list;
+pub mod sphere;
 
 #[derive(Default, Clone, Copy)]
 pub struct HitRecord {
     p: Point3,
-    normal: Vec3,
+    pub normal: Vec3,
     t: f64,
     front_face: bool,
 }
