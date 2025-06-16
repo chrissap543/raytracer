@@ -1,0 +1,3 @@
+[submodule "profiling_data"]
+	path = profiling_data
+	url = git@gits-15.sys.kth.se:niktho/profiling_data.git

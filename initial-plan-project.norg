@@ -1,0 +1,63 @@
+* Team Project - Initial Plan
+Our group is aiming for an A grade in the project and course.
+** Group Members
+   - Sebastian Thaeron `thaeron@kth.se`
+   - Niklas Thomas `niktho@kth.se`
+   - Christopher Sapinski `sapinski@kth.se`
+   - Bjorne Lindkvist `bjolin2@kth.se`
+** Project Scope
+*** Group A
+	(2) Accelerate the timing-consuming parts of an existing application on CPU by offloading to GPU using CUDA programming
+*** Group B
+	(4) A ray tracing application that is introduced at https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/Links to an external site. , including the reference CUDA implementation
+*** Problem
+	Parallelising the computations of pixels and rays for a ray tracing application.
+*** Initial Design
+	Modify the `render(const hittable& world)` function in `camera.h`. Change functions relating to pixels and rays be device based using the relevant keyword.  
+*** Tools
+	Nsight, Cuda Compiler, Nvidia Visual Profiler, Google Colab, Git
+*** Evaluation Plan
+	- Nvidia T4 on Google Colab
+	- The input to the ray tracing application will be a hardcoded classic example provided by the CPU based project used.
+	- Timing difference between CPU and GPU implementation taking memeory allocation into account.
+
+** Parts
+*** Presentation
+	- Create a google slide show
+	- What the GPU was used for
+	- Summary of method used
+	- Show results
+	- Describe anaysles
+*** Code
+	- CPU application profiling
+	- Parallise pixels computations
+	- Parallise rays and pixels computations
+	- GPU application profiling for both implementations
+	- Comment cuda code implementation
+	- Comprehensive Make file (including difference implementations and profiling in built)
+	- Basic README including compiling and profiling steps
+*** Report
+	- Start latex report
+	- Reference or acknowledge to source and code bases used
+	- Light intro into ray tracing theory
+	- CPU profiling results section
+	- GPU profiling results section (pixels and ray and pixels)
+	- Discussion comparing and anaysling results
+	- Conclusion bring discussion back to problem
+	- Figures and tables
+** Prefered Time Slot
+   - Jan 8th in the Afternoon
+** Dates
+   - CPU profiling Nov 30th - Niklas
+   - GPU pixel implementation Dec 8th - Sebastian
+   - GPU pixel profiling Dec 8th - Sebastian
+   - GPU pixel and rays implementation Dec 14th - Chris
+   - GPU pixel and rays profiling Dec 14th - Chris
+   - Report introduction and preliminary method Nov 30th - Bjorne
+   - Finish analysis Dec 21st - Niklas
+   - Finish report Dec 29th - Bjorne
+   - Finish presentation Jan 5th - Chris
+
+
+** Misc
+   - Explore how changing the hardcoded input might change profiling results. Have a set numbers scenes and explore how resolution, number of rays, and ray depth changes the timings in both CPU and GPU implementation.
